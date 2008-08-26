@@ -3,6 +3,7 @@ class RubyamfController < ActionController::Base
   include RubyAMF::App
   
   def gateway      
+    t = Time.now
     RequestStore.rails_authentication = nil #clear auth hash
     RequestStore.rails_request = request
     RequestStore.rails_response = response
@@ -24,7 +25,9 @@ class RubyamfController < ActionController::Base
     headers['Content-Type'] ||= headers['type']
             
     #render the AMF
+    puts " ----------------- #{Time.now - t}"
     send_data(amf_response, {:type => headers['Content-Type'], :disposition => 'inline'})
+    puts " ----------------- #{Time.now - t}"
   rescue Exception => e #only errors in this scope will ever be rescued here, see BatchFiler
     STDOUT.puts e.to_s
     STDOUT.puts e.backtrace

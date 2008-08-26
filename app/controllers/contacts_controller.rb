@@ -2,7 +2,7 @@ class ContactsController < ApplicationController
   # GET /contacts
   # GET /contacts.xml
   def index
-    @contacts = Contact.find(:all)
+    @contacts = Contact.find(:all).sort {|a, b| a.first_name <=> b.first_name }
 
     respond_to do |format|
       format.html # index.html.erb
@@ -60,7 +60,7 @@ class ContactsController < ApplicationController
   # PUT /contacts/1.xml
   def update
     @contact = Contact.find(params[:id])
-    puts "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW - #{params.inspect}"
+
     respond_to do |format|
       if @contact.update_attributes(params[:contact])
         flash[:notice] = 'Contact was successfully updated.'

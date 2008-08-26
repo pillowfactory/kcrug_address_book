@@ -25,8 +25,13 @@
 			}
 			
 			private function load():void {
+				this.contactList.enabled = false;
+				this.contactList.dataProvider = new ArrayCollection();
+				this.contactDetails.selectedChild = noContactDetails;
+				
 				RubyAMF.call('ContactsController', 'index', {}, function(e:ResultEvent):void {
 					contacts = new ArrayCollection(e.result as Array);
+					contactList.enabled = true;
 				}, null);
 			}
 			
@@ -64,7 +69,7 @@
 			<mx:Canvas width="70%" height="100%" borderStyle="inset">
 				<mx:ViewStack id="contactDetails" width="453" height="267">
 					<mx:Canvas id="noContactDetails" width="100%" height="100%">
-						<mx:Label text="No Card Selected" fontWeight="bold" fontSize="14" height="26" textAlign="center" left="0" right="0" top="106"/>
+						<mx:Label text="No Contact Selected" fontWeight="bold" fontSize="14" height="26" textAlign="center" left="0" right="0" top="106"/>
 					</mx:Canvas>
 					<mx:Canvas id="viewContactDetails" width="100%" height="100%">
 						<mx:Label y="10" text="{contactList.selectedItem.fullName}" fontWeight="bold" fontSize="16" x="79"/>
@@ -83,7 +88,7 @@
 		<mx:Button label="+" width="37" left="10" id="addPlus" top="289" click="addContact()" fontSize="12"/>
 	</mx:Panel>
 	<mx:ApplicationControlBar width="704" horizontalCenter="0" top="10">
-		<mx:Button label="RubyAMF" click="load()"/>
+		<mx:Button label="Load Contacts" click="load()"/>
 	</mx:ApplicationControlBar>
 	
 </mx:Application>
