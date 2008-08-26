@@ -36,8 +36,7 @@
 					contactDetails.selectedChild = this.noContactDetails;
 			}
 			
-			private function editContact(contact:Contact):void {
-//				this.editContactDetails.contact = contact;
+			private function editContact():void {
 				this.contactDetails.selectedChild = this.editContactDetails;
 			}
 			
@@ -72,7 +71,7 @@
 						<mx:Label text="{contactList.selectedItem.email}" fontSize="12" left="123" top="59" right="10"/>
 						<mx:Label text="phone" fontWeight="bold" color="#838383" fontSize="12" textAlign="right" left="79" top="88"/>
 						<mx:Label text="{contactList.selectedItem.phoneNumber}" fontSize="12" left="123" top="88" right="10"/>
-						<mx:Button label="Edit" fontSize="12" right="83" bottom="7" click="editContact(contactList.selectedItem as Contact)"/>
+						<mx:Button label="Edit" fontSize="12" right="83" bottom="7" click="editContact()"/>
 						<mx:Button label="Delete" fontSize="12" right="6" bottom="7" click="deleteContact(contactList.selectedItem as Contact)"/>
 					</mx:Canvas>
 					<views:EditContact id="editContactDetails" contact="{contactList.selectedItem as Contact}"/>
