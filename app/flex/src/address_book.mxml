@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:views="org.pillowfactory.views.*" creationComplete="init()" creationPolicy="all">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:views="org.pillowfactory.views.*" 
+	creationComplete="init()" creationPolicy="all" backgroundGradientColors="[#404245, #FFFFFF]">
 	
 	<mx:Script>
 		<![CDATA[
@@ -52,7 +53,7 @@
 		]]>
 	</mx:Script>
 
-	<mx:Panel x="10" y="60" width="704" height="364" layout="absolute" title="Address Book" horizontalAlign="left">
+	<mx:Panel width="704" height="364" layout="absolute" title="Address Book" horizontalAlign="left" horizontalCenter="0" top="51">
 		<mx:HDividedBox x="10" y="10" width="664" height="271">
 			<mx:Canvas width="30%" height="100%" label="Contacts" borderStyle="inset">
 				<mx:List id="contactList" left="0" top="0" right="0" bottom="0" 
@@ -81,7 +82,7 @@
 		</mx:HDividedBox>
 		<mx:Button label="+" width="37" left="10" id="addPlus" top="289" click="addContact()" fontSize="12"/>
 	</mx:Panel>
-	<mx:ApplicationControlBar x="10" y="10" width="704">
+	<mx:ApplicationControlBar width="704" horizontalCenter="0" top="10">
 		<mx:Button label="RubyAMF" click="load()"/>
 	</mx:ApplicationControlBar>
 	
