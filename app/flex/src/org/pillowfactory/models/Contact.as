@@ -7,5 +7,9 @@ package org.pillowfactory.models
 	public class Contact extends ContactBase
 	{
 		
+		public function get fullName():String {
+			return this.firstName + " " + this.lastName;
+		}
+		
 	}
 }

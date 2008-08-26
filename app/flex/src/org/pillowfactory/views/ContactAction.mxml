@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
+	<mx:Script>
+		<![CDATA[
+			import mx.rpc.events.ResultEvent;
+			import org.pillowfactory.models.helpers.RubyAMF;
+			import org.pillowfactory.models.Contact;
+			
+			public static const SAVE_COMPLETE:String = "EditContact.SAVE_COMPLETE";
+			
+			[Bindable]
+			public var contact:Contact;
+			
+			protected function complete():void {
+				trace(contact.toParams());
+				RubyAMF.call('ContactsController', 'create', {contact:this.contact.toParams()}, function(e:ResultEvent):void {
+					dispatchEvent(new Event(SAVE_COMPLETE));
+				}, null);
+			}
+		]]>
+	</mx:Script>
+
+	<mx:Binding source="firstName.text" destination="this.contact.firstName" />
+	<mx:Binding source="lastName.text" destination="this.contact.lastName" />
+	<mx:Binding source="email.text" destination="this.contact.email" />
+	<mx:Binding source="phone.text" destination="this.contact.phoneNumber" />
+
+	<mx:Label text="email" fontWeight="normal" color="#0B333C" fontSize="12" textAlign="right" left="10" top="91"/>
+	<mx:Label text="phone" fontWeight="normal" color="#0B333C" fontSize="12" textAlign="right" left="10" top="124"/>
+	<mx:Label text="first" fontSize="16" top="10" left="10"/>
+	<mx:TextInput fontSize="16" top="8" left="59" right="10" id="firstName" text="{this.contact.firstName}"/>
+	<mx:Label text="last" fontSize="16" top="45" left="10"/>
+	<mx:TextInput fontSize="16" top="43" left="59" right="10" id="lastName" text="{this.contact.lastName}"/>
+	<mx:TextInput fontSize="12" left="59" right="10" top="89" id="email" text="{this.contact.email}"/>
+	<mx:TextInput fontSize="12" left="59" right="10" top="122" id="phone" text="{this.contact.phoneNumber}"/>
+	<mx:Button label="Save" fontSize="12" right="10" bottom="10" click="complete()"/>
+</mx:Canvas>

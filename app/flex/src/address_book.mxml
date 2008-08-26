@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:views="org.pillowfactory.views.*" creationComplete="init()" creationPolicy="all">
 	
 	<mx:Script>
 		<![CDATA[
+			import org.pillowfactory.views.ContactAction;
+			import org.pillowfactory.models.Contact;
 			import mx.rpc.events.ResultEvent;
 			import org.pillowfactory.models.helpers.RubyAMF;
 			import mx.collections.ArrayCollection;
@@ -10,22 +12,78 @@
 			[Bindable]
 			private var contacts:ArrayCollection = new ArrayCollection();
 			
+			private function init():void {
+				this.editContactDetails.addEventListener(ContactAction.SAVE_COMPLETE, contactChanged);
+				this.addContactDetails.addEventListener(ContactAction.SAVE_COMPLETE, contactChanged);
+			}
+			
+			private function contactChanged(e:Event):void {
+				this.load();
+				this.contactList.selectedIndex = -1;
+				this.contactDetails.selectedChild = noContactDetails;
+			}
+			
 			private function load():void {
 				RubyAMF.call('ContactsController', 'index', {}, function(e:ResultEvent):void {
-					// fill list with contacts
+					contacts = new ArrayCollection(e.result as Array);
 				}, null);
+			}
+			
+			private function onContactListChange():void {
+				if( this.contactList.selectedIndex != -1 )
+					contactDetails.selectedChild = this.viewContactDetails;
+				else
+					contactDetails.selectedChild = this.noContactDetails;
+			}
+			
+			private function editContact(contact:Contact):void {
+//				this.editContactDetails.contact = contact;
+				this.contactDetails.selectedChild = this.editContactDetails;
+			}
+			
+			private function addContact():void {
+				this.addContactDetails.contact = new Contact();
+				this.contactDetails.selectedChild = this.addContactDetails;
+			}
+			
+			private function deleteContact(contact:Contact):void {
+				RubyAMF.call("ContactsController", "destroy", {id:contact.id}, contactChanged, null);
 			}
 			
 		]]>
 	</mx:Script>
 
-	<mx:Panel x="10" y="10" width="704" height="364" layout="absolute" title="Address Book" horizontalAlign="left">
+	<mx:Panel x="10" y="60" width="704" height="364" layout="absolute" title="Address Book" horizontalAlign="left">
 		<mx:HDividedBox x="10" y="10" width="664" height="271">
-			<mx:Canvas width="100%" height="100%" id="contactList" label="Contacts" borderStyle="inset"></mx:Canvas>
-			<mx:Canvas width="100%" height="100%" borderStyle="inset"></mx:Canvas>
-			
+			<mx:Canvas width="30%" height="100%" label="Contacts" borderStyle="inset">
+				<mx:List id="contactList" left="0" top="0" right="0" bottom="0" 
+					dataProvider="{this.contacts}" 
+					labelField="fullName"
+					change="onContactListChange()"/>
+			</mx:Canvas>
+			<mx:Canvas width="70%" height="100%" borderStyle="inset">
+				<mx:ViewStack id="contactDetails" width="453" height="267">
+					<mx:Canvas id="noContactDetails" width="100%" height="100%">
+						<mx:Label text="No Card Selected" fontWeight="bold" fontSize="14" height="26" textAlign="center" left="0" right="0" top="106"/>
+					</mx:Canvas>
+					<mx:Canvas id="viewContactDetails" width="100%" height="100%">
+						<mx:Label y="10" text="{contactList.selectedItem.fullName}" fontWeight="bold" fontSize="16" x="79"/>
+						<mx:Label text="email" fontWeight="bold" color="#838383" fontSize="12" textAlign="right" left="83" top="59"/>
+						<mx:Label text="{contactList.selectedItem.email}" fontSize="12" left="123" top="59" right="10"/>
+						<mx:Label text="phone" fontWeight="bold" color="#838383" fontSize="12" textAlign="right" left="79" top="88"/>
+						<mx:Label text="{contactList.selectedItem.phoneNumber}" fontSize="12" left="123" top="88" right="10"/>
+						<mx:Button label="Edit" fontSize="12" right="83" bottom="7" click="editContact(contactList.selectedItem as Contact)"/>
+						<mx:Button label="Delete" fontSize="12" right="6" bottom="7" click="deleteContact(contactList.selectedItem as Contact)"/>
+					</mx:Canvas>
+					<views:EditContact id="editContactDetails" contact="{contactList.selectedItem as Contact}"/>
+					<views:AddContact id="addContactDetails" />
+				</mx:ViewStack>
+			</mx:Canvas>
 		</mx:HDividedBox>
-		<mx:Button x="10" y="292" label="load" click="load()"/>
+		<mx:Button label="+" width="37" left="10" id="addPlus" top="289" click="addContact()" fontSize="12"/>
 	</mx:Panel>
+	<mx:ApplicationControlBar x="10" y="10" width="704">
+		<mx:Button label="RubyAMF" click="load()"/>
+	</mx:ApplicationControlBar>
 	
 </mx:Application>

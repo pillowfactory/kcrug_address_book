@@ -15,6 +15,7 @@ package org.pillowfactory.models.base
 	  	private var _firstName:String;
 	  	private var _id:Number;
 	  	private var _lastName:String;
+	  	private var _phoneNumber:String;
 	  	
 		public var errors:Errors = new Errors;
 		
@@ -29,6 +30,7 @@ package org.pillowfactory.models.base
 			params['firstName'] = this.firstName;
 			params['id'] = this.id;
 			params['lastName'] = this.lastName;
+			params['phoneNumber'] = this.phoneNumber;
 			
 			return params.remove(exclude);
 		}
@@ -68,6 +70,15 @@ package org.pillowfactory.models.base
 		
 		public function set lastName(value:String):void {
 			this._lastName = value;
+		}
+		
+		// ACCESSORS: phoneNumber
+		public function get phoneNumber():String {
+			return this._phoneNumber;
+		}
+		
+		public function set phoneNumber(value:String):void {
+			this._phoneNumber = value;
 		}
 		
 	}

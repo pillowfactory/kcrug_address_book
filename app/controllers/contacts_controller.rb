@@ -7,6 +7,7 @@ class ContactsController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @contacts }
+      format.amf  { render :amf => @contacts }
     end
   end
 
@@ -47,6 +48,7 @@ class ContactsController < ApplicationController
         flash[:notice] = 'Contact was successfully created.'
         format.html { redirect_to(@contact) }
         format.xml  { render :xml => @contact, :status => :created, :location => @contact }
+        format.amf  { render :amf => @contact }
       else
         format.html { render :action => "new" }
         format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
@@ -58,12 +60,13 @@ class ContactsController < ApplicationController
   # PUT /contacts/1.xml
   def update
     @contact = Contact.find(params[:id])
-
+    puts "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW - #{params.inspect}"
     respond_to do |format|
       if @contact.update_attributes(params[:contact])
         flash[:notice] = 'Contact was successfully updated.'
         format.html { redirect_to(@contact) }
         format.xml  { head :ok }
+        format.amf  { render :amf => @contact }
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @contact.errors, :status => :unprocessable_entity }
@@ -80,6 +83,7 @@ class ContactsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to(contacts_url) }
       format.xml  { head :ok }
+      format.amf  { render :amf => :ok }
     end
   end
 end

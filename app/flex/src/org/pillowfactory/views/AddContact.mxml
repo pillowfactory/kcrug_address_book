@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContactAction xmlns="org.pillowfactory.views.*" xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
+	<mx:Script>
+		<![CDATA[
+			import org.pillowfactory.models.helpers.RubyAMF;
+			import mx.rpc.events.ResultEvent;
+			
+			protected override function complete():void {
+				RubyAMF.call('ContactsController', 'create', {contact:this.contact.toParams()}, function(e:ResultEvent):void {
+					dispatchEvent(new Event(SAVE_COMPLETE));
+				}, null);
+			}
+		]]>
+	</mx:Script>
+</ContactAction>
