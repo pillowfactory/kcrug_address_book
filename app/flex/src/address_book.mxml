@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.rpc.events.ResultEvent;
+			import org.pillowfactory.models.helpers.RubyAMF;
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			private var contacts:ArrayCollection = new ArrayCollection();
+			
+			private function load():void {
+				RubyAMF.call('ContactsController', 'index', {}, function(e:ResultEvent):void {
+					// fill list with contacts
+				}, null);
+			}
+			
+		]]>
+	</mx:Script>
+
 	<mx:Panel x="10" y="10" width="704" height="364" layout="absolute" title="Address Book" horizontalAlign="left">
-		<mx:HDividedBox x="10" y="10" width="664" height="304">
+		<mx:HDividedBox x="10" y="10" width="664" height="271">
 			<mx:Canvas width="100%" height="100%" id="contactList" label="Contacts" borderStyle="inset"></mx:Canvas>
 			<mx:Canvas width="100%" height="100%" borderStyle="inset"></mx:Canvas>
 			
 		</mx:HDividedBox>
+		<mx:Button x="10" y="292" label="load" click="load()"/>
 	</mx:Panel>
 	
 </mx:Application>
